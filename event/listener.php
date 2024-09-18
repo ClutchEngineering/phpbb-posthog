@@ -105,7 +105,7 @@ class listener implements EventSubscriberInterface
 				'posthog_id' => [
 					'lang'		=> 'ACP_POSTHOG_ID',
 					'validate'	=> 'posthog_id',
-					'type'		=> 'text:40:20',
+					'type'		=> 'text:60:50',
 					'explain'	=> true,
 				],
 				'posthog_host' => [
