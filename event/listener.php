@@ -1,14 +1,15 @@
 <?php
 /**
  *
- * Google Analytics extension for the phpBB Forum Software package.
+ * PostHog extension for the phpBB Forum Software package.
+ * Forked from Google Analytics extension for the phpBB Forum Software package on 2024-09-18.
  *
- * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>
+ * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>, (c) 2024 Clutch Engineering <https://clutch.engineering>
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
 
-namespace phpbb\googleanalytics\event;
+namespace clutchengineering\posthog\event;
 
 use phpbb\config\config;
 use phpbb\language\language;
@@ -60,25 +61,23 @@ class listener implements EventSubscriberInterface
 	public static function getSubscribedEvents()
 	{
 		return [
-			'core.acp_board_config_edit_add'	=> 'add_googleanalytics_configs',
-			'core.page_header'					=> 'load_google_analytics',
-			'core.validate_config_variable'		=> 'validate_googleanalytics_id',
+			'core.acp_board_config_edit_add'	=> 'add_posthog_configs',
+			'core.page_header'					=> 'load_posthog',
+			'core.validate_config_variable'		=> 'validate_posthog_configuration',
 		];
 	}
 
 	/**
-	 * Load Google Analytics js code
+	 * Load PostHog js code
 	 *
 	 * @return void
 	 * @access public
 	 */
-	public function load_google_analytics()
+	public function load_posthog()
 	{
 		$this->template->assign_vars([
-			'GOOGLEANALYTICS_ID'		=> $this->config['googleanalytics_id'],
-			'GOOGLEANALYTICS_TAG'		=> $this->config['googleanalytics_tag'],
-			'GOOGLEANALYTICS_USER_ID'	=> $this->user->data['user_id'],
-			'S_ANONYMIZE_IP'			=> $this->config['ga_anonymize_ip'],
+			'POSTHOG_ID'		=> $this->config['posthog_id'],
+			'POSTHOG_HOST'		=> $this->config['posthog_host'],
 		]);
 	}
 
@@ -89,40 +88,34 @@ class listener implements EventSubscriberInterface
 	 * @return void
 	 * @access public
 	 */
-	public function add_googleanalytics_configs($event)
+	public function add_posthog_configs($event)
 	{
 		// Add a config to the settings mode, after warnings_expire_days
 		if ($event['mode'] === 'settings' && isset($event['display_vars']['vars']['warnings_expire_days']))
 		{
 			// Load language file
-			$this->language->add_lang('googleanalytics_acp', 'phpbb/googleanalytics');
+			$this->language->add_lang('posthog_acp', 'phpbb/posthog');
 
 			// Store display_vars event in a local variable
 			$display_vars = $event['display_vars'];
 
 			// Define the new config vars
 			$ga_config_vars = [
-				'legend_googleanalytics' => 'ACP_GOOGLEANALYTICS',
-				'googleanalytics_id' => [
-					'lang'		=> 'ACP_GOOGLEANALYTICS_ID',
-					'validate'	=> 'googleanalytics_id',
+				'legend_posthog' => 'ACP_POSTHOG',
+				'posthog_id' => [
+					'lang'		=> 'ACP_POSTHOG_ID',
+					'validate'	=> 'posthog_id',
 					'type'		=> 'text:40:20',
 					'explain'	=> true,
 				],
-				'ga_anonymize_ip' => [
-					'lang'		=> 'ACP_GA_ANONYMIZE_IP',
-					'validate'	=> 'bool',
-					'type'		=> 'radio:yes_no',
-					'explain'	=> true,
-				],
-				'googleanalytics_tag' => [
-					'lang'		=> 'ACP_GOOGLEANALYTICS_TAG',
+				'posthog_host' => [
+					'lang'		=> 'ACP_POSTHOG_HOST',
 					'validate'	=> 'int',
 					'type'		=> 'select',
 					'function'	=> 'build_select',
 					'params'	=> [[
-						0	=> 'ACP_GA_ANALYTICS_TAG',
-						1	=> 'ACP_GA_GTAGS_TAG',
+						0	=> 'ACP_POSTHOG_EU_HOST',
+						1	=> 'ACP_POSTHOG_US_HOST',
 					], '{CONFIG_VALUE}'],
 					'explain'	=> true,
 				],
@@ -138,34 +131,28 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * Validate the Google Analytics ID
+	 * Validate the PostHog configuration
 	 *
 	 * @param \phpbb\event\data $event The event object
 	 * @return void
 	 * @access public
 	 */
-	public function validate_googleanalytics_id($event)
+	public function validate_posthog_configuration($event)
 	{
-		// Check if the validate test is for google_analytics
-		if ($event['config_definition']['validate'] !== 'googleanalytics_id' || empty($event['cfg_array']['googleanalytics_id']))
+		// Check if the validate test is for posthog
+		if ($event['config_definition']['validate'] !== 'posthog_id' || empty($event['cfg_array']['posthog_id']))
 		{
 			return;
 		}
 
 		// Store the input and error event data
-		$input = $event['cfg_array']['googleanalytics_id'];
+		$input = $event['cfg_array']['posthog_id'];
 		$error = $event['error'];
 
-		// Add error message if the input is not a valid Google Analytics ID
-		if (!preg_match('/^UA-\d{4,9}-\d{1,4}$|^G-[A-Z0-9]{10}$/', $input))
+		// Add error message if the input is not a valid PostHog Key
+		if (!preg_match('^phc_[\w\d]{43}$', $input))
 		{
-			$error[] = $this->language->lang('ACP_GOOGLEANALYTICS_ID_INVALID', $input);
-		}
-
-		// Add error message if GTAG is not selected for use with a Measurement ID
-		if ((int) $event['cfg_array']['googleanalytics_tag'] === 0 && preg_match('/^G-[A-Z0-9]{10}$/', $input))
-		{
-			$error[] = $this->language->lang('ACP_GOOGLEANALYTICS_TAG_INVALID', $input);
+			$error[] = $this->language->lang('ACP_POSTHOG_ID_INVALID', $input);
 		}
 
 		// Update error event data

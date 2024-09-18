@@ -1,20 +1,21 @@
 <?php
 /**
  *
- * Google Analytics extension for the phpBB Forum Software package.
+ * PostHog extension for the phpBB Forum Software package.
+ * Forked from Google Analytics extension for the phpBB Forum Software package on 2024-09-18.
  *
- * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>
+ * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>, (c) 2024 Clutch Engineering <https://clutch.engineering>
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
 
-namespace phpbb\googleanalytics\tests\event;
+namespace clutchengineering\posthog\tests\event;
 
 require_once __DIR__ . '/../../../../../includes/functions_acp.php';
 
 class listener_test extends \phpbb_test_case
 {
-	/** @var \phpbb\googleanalytics\event\listener */
+	/** @var \clutchengineering\posthog\event\listener */
 	protected $listener;
 
 	/** @var \phpbb\config\config */

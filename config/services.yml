@@ -1,6 +1,6 @@
 services:
-    phpbb.googleanalytics.listener:
-        class: phpbb\googleanalytics\event\listener
+    clutchengineering.posthog.listener:
+        class: clutchengineering\posthog\event\listener
         arguments:
             - '@config'
             - '@language'

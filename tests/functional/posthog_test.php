@@ -1,19 +1,20 @@
 <?php
 /**
  *
- * Google Analytics extension for the phpBB Forum Software package.
+ * PostHog extension for the phpBB Forum Software package.
+ * Forked from Google Analytics extension for the phpBB Forum Software package on 2024-09-18.
  *
- * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>
+ * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>, (c) 2024 Clutch Engineering <https://clutch.engineering>
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
 
-namespace phpbb\googleanalytics\tests\functional;
+namespace clutchengineering\posthog\tests\functional;
 
 /**
  * @group functional
  */
-class google_analytics_test extends \phpbb_functional_test_case
+class posthog_test extends \phpbb_functional_test_case
 {
 	/** @var string */
 	protected $sample_ga_code = 'UA-000000-00';
@@ -25,11 +26,11 @@ class google_analytics_test extends \phpbb_functional_test_case
 	 */
 	protected static function setup_extensions()
 	{
-		return ['phpbb/googleanalytics'];
+		return ['clutchengineering/posthog'];
 	}
 
 	/**
-	 * Test Google Analytics ACP page and save settings
+	 * Test PostHog ACP page and save settings
 	 */
 	public function test_set_acp_settings()
 	{
@@ -38,7 +39,7 @@ class google_analytics_test extends \phpbb_functional_test_case
 
 		// Add language files
 		$this->add_lang('acp/board');
-		$this->add_lang_ext('phpbb/googleanalytics', 'googleanalytics_acp');
+		$this->add_lang_ext('clutchengineering/posthog', 'posthog_acp');
 
 		$found = false;
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0 - 2024-09-18
+
+- Forked from the Google Analytics plugin and updated to use PostHog instead.
+
+---
+
 ## 1.0.6 - 2020-11-15
 
 - Added support for Google Analytics Measurement ID. This is for users who have set up a Google Analytics 4 property with a Web data stream (which begins with "G-") instead of Universal Analytics (which begins with "UA-").

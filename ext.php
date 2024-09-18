@@ -1,14 +1,15 @@
 <?php
 /**
  *
- * Google Analytics extension for the phpBB Forum Software package.
- *
- * @copyright (c) 2021 phpBB Limited <https://www.phpbb.com>
+* PostHog extension for the phpBB Forum Software package.
+* Forked from Google Analytics extension for the phpBB Forum Software package.
+*
+* @copyright (c) 2021 phpBB Limited <https://www.phpbb.com>, (c) 2024 Clutch Engineering <https://clutch.engineering>
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
 
-namespace phpbb\googleanalytics;
+namespace clutchengineering\posthog;
 
 use phpbb\extension\base;
 

@@ -12,32 +12,35 @@
 namespace clutchengineering\posthog\migrations\v10x;
 
 /**
- * Migration stage 1: Initial data changes to the database
+ * Migration stage 2: Add PostHog host config option
  */
-class m1_initial_data extends \phpbb\db\migration\migration
+class m3_tag_option extends \phpbb\db\migration\migration
 {
 	/**
-	 * Assign migration file dependencies for this migration
-	 *
-	 * @return array Array of migration files
-	 * @static
-	 * @access public
+	 * {@inheritdoc}
 	 */
 	public static function depends_on()
 	{
-		return ['\phpbb\db\migration\data\v310\gold'];
+		return ['\clutchengineering\posthog\migrations\v10x\m1_initial_data'];
 	}
 
 	/**
-	 * Add PostHog data to the database.
+	 * {@inheritdoc}
+	 */
+	public function effectively_installed()
+	{
+		return $this->config->offsetExists('posthog_host');
+	}
+
+	/**
+	 * {@inheritdoc}
 	 *
-	 * @return array Array of table data
-	 * @access public
+	 * Defaults to EU host.
 	 */
 	public function update_data()
 	{
 		return [
-			['config.add', ['posthog_id', '']],
+			['config.add', ['posthog_host', (int) 0]],
 		];
 	}
 }
