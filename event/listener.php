@@ -150,7 +150,7 @@ class listener implements EventSubscriberInterface
 		$error = $event['error'];
 
 		// Add error message if the input is not a valid PostHog Key
-		if (!preg_match('^phc_[\w\d]{43}$', $input))
+		if (!preg_match('/phc_[\w\d]{43}$/', $input))
 		{
 			$error[] = $this->language->lang('ACP_POSTHOG_ID_INVALID', $input);
 		}
