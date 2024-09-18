@@ -94,7 +94,7 @@ class listener implements EventSubscriberInterface
 		if ($event['mode'] === 'settings' && isset($event['display_vars']['vars']['warnings_expire_days']))
 		{
 			// Load language file
-			$this->language->add_lang('posthog_acp', 'phpbb/posthog');
+			$this->language->add_lang('posthog_acp', 'clutchengineering/posthog');
 
 			// Store display_vars event in a local variable
 			$display_vars = $event['display_vars'];
